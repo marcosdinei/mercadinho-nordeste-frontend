@@ -1,27 +1,24 @@
-# MercadinhoNordesteFrontend
+# Mercadinho Nordeste - Frontend
+![Typescript Badge](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![HTML Badge](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS Badge](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+[![Angular Badge](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.1.
+## Descrição
+Aplicação Angular para gerenciar os produtos, compras e vendas do Mercadinho Nordeste e que consumirá uma [API Java SpringBoot](https://github.com/marcosdinei/mercadinho-nordeste-backend).
 
-## Development server
+O Mercadinho Nordeste está localizado no Bosque Brasil, Macaíba-RN. Para facilitar a movimentação do caixa (feita com anotações em cadernos), o sistema foi pensado com o objetivo de registrar os produtos, compras e vendas, além de gerar relatórios periódicos de toda a movimentação.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Como inicializar a aplicação
+### Requisitos
+- [Node 16](https://nodejs.org/pt-br/download/)
+- [npm 8](https://www.npmjs.com/package/npm/v/8.5.0)
+- [Angular CLI 15](https://angular.io/)
 
-## Code scaffolding
+### Inicialização
+- Entre na pasta raiz do projeto
+- É necessário instalar as dependências do projeto. Para isso, utilize o comando ``npm i``.
+- Para iniciar localmente, utilize um dos comandos ``ng serve`` ou ``npm run start`` e abra o navegador em ``http://localhost:4200``.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Build
+Para fazer o _build_ do projeto, utilize o comando ``ng build``. Após o processo ser finalizado com sucesso, os arquivos estarão disponíveis no diretório ``dist``.
