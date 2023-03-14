@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import './app/shared/styles/reset';
+@import './app/shared/styles/colors';
+@import './app/shared/styles/constants';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1.page-title {
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: var(--indigo);
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
