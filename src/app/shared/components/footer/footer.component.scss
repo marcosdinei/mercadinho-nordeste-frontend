@@ -1,0 +1,14 @@
+.footer {
+  height: var(--footer-height);
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .infos {
+    display: flex;
+    width: 30rem;
+    justify-content: space-between;
+  }
+}
