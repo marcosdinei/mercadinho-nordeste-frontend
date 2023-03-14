@@ -1,0 +1,32 @@
+.header {
+  height: var(--header-height);
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo {
+    text-transform: uppercase;
+    font-size: 2.5rem;
+  }
+
+  .menu {
+    display: flex;
+    column-gap: 2rem;
+    font-size: 1.25rem;
+
+    .menu-item {
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #FFF;
+    }
+  }
+
+  .current-date {
+    width: 20rem;
+    font-size: 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,15 @@
+<mat-toolbar color="primary" class="header">
+  <span class="logo">Mercadinho Nordeste</span>
+  <div class="menu">
+    <a class="menu-item" routerLink="/">Início</a>
+    <a class="menu-item" routerLink="pdv">Caixa</a>
+    <a class="menu-item" routerLink="produtos">Produtos</a>
+    <a class="menu-item" routerLink="compras">Compras</a>
+    <a class="menu-item" routerLink="vendas">Vendas</a>
+    <a class="menu-item" routerLink="relatorios">Relatórios</a>
+  </div>
+  <div class="current-date" *ngIf="currentDate$ | async as currentDate">
+    <span class="date">{{ currentDate | date : 'dd/MM/yyyy' }}</span>
+    <span class="time">{{ currentDate | date : 'HH:mm:ss' }}</span>
+  </div>
+</mat-toolbar>
