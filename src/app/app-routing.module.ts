@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { ProductsComponent } from './home/products/products.component';
-import { PdvComponent } from './pdv/pdv.component';
 
 const routes: Routes = [
   {
@@ -15,10 +14,6 @@ const routes: Routes = [
         component: ProductsComponent
       }
     ]
-  },
-  {
-    path: 'pdv',
-    component: PdvComponent
   },
   {
     path: '**',
