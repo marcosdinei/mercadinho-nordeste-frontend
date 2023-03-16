@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { FooterComponent } from '../shared/components/footer/footer.component';
 import { HeaderComponent } from '../shared/components/header/header.component';
+import { ListComponent } from '../shared/components/list/list.component';
 import { HomeComponent } from './home.component';
 import { ProductsComponent } from './products/products.component';
 
@@ -20,6 +21,7 @@ import { ProductsComponent } from './products/products.component';
     RouterModule,
     HeaderComponent,
     FooterComponent,
+    ListComponent,
     MatTabsModule
   ]
 })

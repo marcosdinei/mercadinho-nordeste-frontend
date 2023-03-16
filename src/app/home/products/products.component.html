@@ -2,7 +2,9 @@
 
 <mat-tab-group dynamicHeight>
   <mat-tab labelClass="tab-label" label="Lista">
+    <app-list [dataSource]="products" [columns]="columns">
 
+    </app-list>
   </mat-tab>
   <mat-tab labelClass="tab-label" label="Novo">
 
