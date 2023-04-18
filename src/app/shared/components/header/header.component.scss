@@ -3,13 +3,8 @@
   position: fixed;
   top: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-
-  .logo {
-    text-transform: uppercase;
-    font-size: 2.5rem;
-  }
 
   .menu {
     display: flex;

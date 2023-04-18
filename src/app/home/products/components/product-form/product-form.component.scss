@@ -1,0 +1,20 @@
+.product-form {
+  padding-top: 1rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+
+  .description {
+    grid-column: 3 span;
+  }
+
+  .category, .price {
+    grid-column: 2 span;
+  }
+
+  .price, .box-price {
+    input {text-align: right;}
+  }
+}

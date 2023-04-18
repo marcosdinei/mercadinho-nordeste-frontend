@@ -1,12 +1,7 @@
 :host ::ng-deep {
-  th {
-    font-size: 1.25rem;
+  th, td {
     vertical-align: middle;
     text-transform: uppercase;
-  }
-
-  td {
-    font-size: 1.5rem;
   }
 }
 

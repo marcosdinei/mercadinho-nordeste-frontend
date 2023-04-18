@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>Detalhes do produto</h2>
+
+<mat-dialog-content>
+  <form class="product-form" [formGroup]="productData">
+
+    <mat-form-field class="description">
+      <mat-label>Descrição</mat-label>
+      <input matInput type="text" formControlName="description">
+      <mat-error>
+        Por favor, informe a descrição do produto
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="code">
+      <mat-label>Código de barras</mat-label>
+      <input matInput type="text" formControlName="code">
+      <mat-error>
+        Por favor, informe o código do produto
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="category">
+      <mat-label>Categoria</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="category"
+        [matAutocomplete]="auto"
+      >
+      <mat-error>
+        Por favor, informe a categoria do produto
+      </mat-error>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+          {{ category.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="price" floatLabel="always">
+      <mat-label>Preço</mat-label>
+      <span matTextPrefix>R$</span>
+      <input
+        matInput
+        type="text"
+        formControlName="price"
+        mask="0*.00"
+        [dropSpecialCharacters]="false"
+        placeholder="0.00"
+      >
+      <mat-error>
+        Por favor, informe o preço do produto
+      </mat-error>
+    </mat-form-field>
+
+    <div>
+      <mat-slide-toggle (change)="hasBoxEvent($event)" color="primary">Possui caixa?</mat-slide-toggle>
+      <mat-error></mat-error>
+    </div>
+
+    <mat-form-field class="quantityProduct" formGroupName="box">
+      <mat-label>Quantidade</mat-label>
+      <input mask="0*" matInput type="text" formControlName="quantityProduct">
+      <mat-error>
+        Por favor, informe a quantidade de produtos
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="code" formGroupName="box">
+      <input matInput type="text" placeholder="Código" formControlName="code">
+      <mat-error>
+        Por favor, informe o código de barras da caixa
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="box-price" floatLabel="always" formGroupName="box">
+      <mat-label>Preço</mat-label>
+      <span matTextPrefix>R$</span>
+      <input
+        matInput
+        type="text"
+        formControlName="price"
+        mask="0*.00"
+        [dropSpecialCharacters]="false"
+        placeholder="0.00"
+      >
+      <mat-error>
+        Por favor, informe o preço da caixa
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" mat-dialog-close (click)="updateProduct()" [disabled]="productData.invalid">Salvar</button>
+</mat-dialog-actions>

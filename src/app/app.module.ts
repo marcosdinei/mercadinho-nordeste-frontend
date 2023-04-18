@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -16,7 +17,12 @@ import { HomeModule } from './home/home.module';
     BrowserAnimationsModule,
     HomeModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: "outline" },
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

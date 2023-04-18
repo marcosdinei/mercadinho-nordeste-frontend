@@ -1,0 +1,122 @@
+<form [formGroup]="productData" (ngSubmit)="submitProduct()">
+  <mat-stepper #stepper [linear]="true">
+
+    <mat-step [stepControl]="productData.get('description')!">
+      <ng-template matStepLabel>Descrição do produto</ng-template>
+      <mat-form-field class="description">
+        <input
+          matInput
+          type="text"
+          placeholder="Descrição"
+          formControlName="description"
+        >
+        <mat-error *ngIf="productData.get('description')?.invalid">
+          Por favor, informe a descrição do produto
+        </mat-error>
+      </mat-form-field>
+      <div class="stepper-button">
+        <button mat-button type="button" matStepperNext>Avançar</button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="productData.get('code')!">
+      <ng-template matStepLabel>Código de barras</ng-template>
+      <mat-form-field class="code">
+        <input matInput type="text" placeholder="Código" formControlName="code">
+      </mat-form-field>
+      <div class="stepper-button">
+        <button mat-button type="button" matStepperPrevious>Voltar</button>
+        <button mat-button type="button" matStepperNext>Avançar</button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="group(productData.get('category')!, productData.get('price')!)">
+      <ng-template matStepLabel>Categoria e Preço</ng-template>
+      <div class="category-price">
+        <mat-form-field class="category">
+          <input
+            matInput
+            type="text"
+            formControlName="category"
+            [matAutocomplete]="auto"
+            placeholder="Categoria"
+          >
+          <mat-error *ngIf="productData.get('category')?.invalid">
+            Por favor, informe a categoria do produto
+          </mat-error>
+          <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+              {{ category.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="price" floatLabel="always">
+          <span matTextPrefix>R$</span>
+          <input
+            matInput
+            type="text"
+            formControlName="price"
+            mask="0*.00"
+            [dropSpecialCharacters]="false"
+            placeholder="0.00"
+          >
+          <mat-error *ngIf="productData.get('price')?.invalid">
+            Por favor, informe o preço do produto
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="stepper-button">
+        <button mat-button type="button" matStepperPrevious>Voltar</button>
+        <button mat-button type="button" matStepperNext>Avançar</button>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="productData.get('box')!">
+      <ng-template matStepLabel>Caixa do produto</ng-template>
+      <div class="box" formGroupName="box">
+
+        <mat-slide-toggle (change)="hasBoxEvent($event)" color="primary">Possui caixa?</mat-slide-toggle>
+
+        <mat-form-field class="quantityProduct">
+          <mat-label>Quantidade</mat-label>
+          <input mask="0*" matInput type="text" formControlName="quantityProduct">
+          <mat-error *ngIf="productData.get('box')?.get('quantityProduct')?.invalid">
+            Por favor, informe a quantidade de produtos
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="code">
+          <input matInput type="text" placeholder="Código" formControlName="code">
+          <mat-error *ngIf="productData.get('box')?.get('code')?.invalid">
+            Por favor, informe o código de barras da caixa
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="price" floatLabel="always">
+          <mat-label>Preço</mat-label>
+          <span matTextPrefix>R$</span>
+          <input
+            matInput
+            type="text"
+            formControlName="price"
+            mask="0*.00"
+            [dropSpecialCharacters]="false"
+            placeholder="0.00"
+          >
+          <mat-error *ngIf="productData.get('box')?.get('price')?.invalid">
+            Por favor, informe o preço da caixa
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="stepper-button">
+        <button mat-button type="button" matStepperPrevious>Voltar</button>
+        <button mat-button type="submit" matStepperNext>Cadastrar</button>
+      </div>
+    </mat-step>
+
+  </mat-stepper>
+</form>
+

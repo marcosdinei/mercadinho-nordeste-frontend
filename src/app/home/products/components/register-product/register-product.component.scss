@@ -1,0 +1,28 @@
+:host ::ng-deep mat-form-field {
+  margin-top: 1rem;
+}
+
+.description {
+  width: 100%;
+}
+
+.price input {
+  text-align: right;
+}
+
+.stepper-button {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.category-price, .box {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  align-items: center;
+
+  .category, .price, .code, .quantityProduct {
+    width: 100%;
+  }
+}
