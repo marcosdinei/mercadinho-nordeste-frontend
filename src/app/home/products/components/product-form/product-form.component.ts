@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,9 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 
 import { Category, Product } from '../../../../shared/model/product';
+import { ProductService } from '../../../../shared/services/product.service';
 
 @Component({
   selector: 'app-product-form',
@@ -36,13 +37,14 @@ import { Category, Product } from '../../../../shared/model/product';
 })
 export class ProductFormComponent {
   productData!: FormGroup;
-  filteredCategories!: Observable<Category[]>;
+  categories$!: Observable<Category[]>;
 
   hasBox: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: {product: Product, categories: Category[]}
+    @Inject(MAT_DIALOG_DATA) public data: {product: Product},
+    private service: ProductService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +54,7 @@ export class ProductFormComponent {
 
   createForm() {
     this.productData = this.formBuilder.group({
+      id: [null, Validators.required],
       description: [null, Validators.required],
       category: [null, Validators.required],
       price: [null, Validators.required],
@@ -64,6 +67,10 @@ export class ProductFormComponent {
     });
 
     this.productData.patchValue(this.data.product);
+
+    //just to show the dot of float values on the input
+    this.productData.get('price')?.setValue(this.productData.get('price')?.value.toString());
+
     if (this.data.product.box) this.hasBox = true;
     else this.productData.get('box')?.disable();
   }
@@ -72,18 +79,12 @@ export class ProductFormComponent {
     return category && category.name ? category.name : '';
   }
 
-  private _filter(name: string): Category[] {
-    const filterValue = name.toLowerCase();
-    return this.data.categories.filter(category => category.name.toLowerCase().includes(filterValue));
-  }
-
   filterCategory() {
-    this.filteredCategories = (this.productData.get('category') as FormControl).valueChanges.pipe(
+    this.categories$ = (this.productData.get('category') as FormControl).valueChanges.pipe(
       startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.data.categories.slice();
-      })
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.service.listCategories(value))
     );
   }
 
@@ -115,10 +116,20 @@ export class ProductFormComponent {
 
   updateProduct() {
     if (this.productData.valid) {
-      if (!this.productData.get('category')?.value.id)
-        console.log('cadastrar categoria e setar o category com o response');
-
-     console.log('cadastrar produto') ;
+      let category = this.productData.get('category')?.value;
+      if (!category.id) {
+        this.service.createCategory({name: category})
+          .pipe(
+            switchMap((res: Category) => {
+              this.productData.get('category')?.setValue(res);
+              this.productData.updateValueAndValidity();
+              return this.service.updateProduct(this.productData.value)
+            })
+          )
+          .subscribe();
+      } else {
+        this.service.updateProduct(this.productData.value).subscribe();
+      }
     }
   }
 }

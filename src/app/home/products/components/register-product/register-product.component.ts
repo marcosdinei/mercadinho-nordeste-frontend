@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -17,9 +17,10 @@ import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/sl
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 
 import { Category } from '../../../../shared/model/product';
+import { ProductService } from '../../../../shared/services/product.service';
 
 @Component({
   selector: 'app-register-product',
@@ -46,12 +47,11 @@ export class RegisterProductComponent {
   @ViewChild('stepper') stepper!: MatStepper;
   productData!: FormGroup;
 
-  @Input() categories!: Category[];
-  filteredCategories!: Observable<Category[]>;
+  categories$!: Observable<Category[]>;
 
   hasBox: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder, private service: ProductService) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -60,16 +60,17 @@ export class RegisterProductComponent {
 
   createForm() {
     this.productData = this.formBuilder.group({
-      description: ['', Validators.required],
-      category: ['', Validators.required],
-      price: ['', Validators.required],
-      code: ['', Validators.required],
+      description: [null, Validators.required],
+      category: [null, Validators.required],
+      price: [null, Validators.required],
+      code: [null, Validators.required],
       box: this.formBuilder.group({
         quantityProduct: [null],
         price: [null],
         code: [null]
       })
     });
+
     this.productData.get('box')?.disable();
   }
 
@@ -77,27 +78,17 @@ export class RegisterProductComponent {
     return category && category.name ? category.name : '';
   }
 
-  private _filter(name: string): Category[] {
-    const filterValue = name.toLowerCase();
-    return this.categories.filter(category => category.name.toLowerCase().includes(filterValue));
-  }
-
   filterCategory() {
-    this.filteredCategories = (this.productData.get('category') as FormControl).valueChanges.pipe(
+    this.categories$ = (this.productData.get('category') as FormControl).valueChanges.pipe(
       startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.categories.slice();
-      })
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap((value: string) => this.service.listCategories(value))
     );
   }
 
-  group(control1: AbstractControl, control2: AbstractControl): FormGroup {
-    return this.formBuilder.group({control1, control2});
-  }
-
   hasBoxEvent(hasBox: MatSlideToggleChange) {
-    this.hasBox = hasBox.checked
+    this.hasBox = hasBox.checked;
     if (this.hasBox) {
       this.productData.get('box')?.enable();
       this.productData.get('box.quantityProduct')?.setValidators([Validators.required]);
@@ -124,11 +115,24 @@ export class RegisterProductComponent {
 
   submitProduct() {
     if (this.productData.valid) {
-      if (!this.productData.get('category')?.value.id)
-        console.log('cadastrar categoria e setar o category com o response');
-
-     console.log('cadastrar produto') ;
+      let category = this.productData.get('category')?.value;
+      if (!category.id) {
+        this.service.createCategory({name: category})
+          .pipe(
+            switchMap((res: Category) => {
+              this.productData.get('category')?.setValue(res);
+              this.productData.updateValueAndValidity();
+              return this.service.createProduct(this.productData.value)
+            })
+          )
+          .subscribe(() => this.resetForm());
+      } else {
+        this.service.createProduct(this.productData.value).subscribe(() => this.resetForm());
+      }
     }
+  }
+
+  resetForm() {
     this.productData.reset();
     this.productData.get('box')?.disable();
     this.stepper.reset();

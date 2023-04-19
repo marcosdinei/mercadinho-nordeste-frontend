@@ -31,7 +31,7 @@
         Por favor, informe a categoria do produto
       </mat-error>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+        <mat-option *ngFor="let category of categories$ | async" [value]="category">
           {{ category.name }}
         </mat-option>
       </mat-autocomplete>
@@ -54,7 +54,7 @@
     </mat-form-field>
 
     <div>
-      <mat-slide-toggle (change)="hasBoxEvent($event)" color="primary">Possui caixa?</mat-slide-toggle>
+      <mat-slide-toggle (change)="hasBoxEvent($event)" [checked]="hasBox" color="primary">Possui caixa?</mat-slide-toggle>
       <mat-error></mat-error>
     </div>
 
@@ -74,7 +74,7 @@
     </mat-form-field>
 
     <mat-form-field class="box-price" floatLabel="always" formGroupName="box">
-      <mat-label>Preço</mat-label>
+      <mat-label>Preço da caixa</mat-label>
       <span matTextPrefix>R$</span>
       <input
         matInput

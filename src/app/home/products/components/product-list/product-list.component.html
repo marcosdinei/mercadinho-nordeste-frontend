@@ -1,5 +1,5 @@
 <div class="shadow">
-  <table mat-table [dataSource]="products">
+  <table mat-table [dataSource]="products.content" *ngIf="products$ | async as products">
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Descrição</th>

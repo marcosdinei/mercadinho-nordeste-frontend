@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Category, Product } from 'src/app/shared/model/product';
+import { Observable } from 'rxjs';
+import { PaginatedData } from 'src/app/shared/model/api-response';
+import { Product } from 'src/app/shared/model/product';
 
+import { ProductService } from '../../../../shared/services/product.service';
 import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
@@ -23,18 +26,17 @@ import { ProductFormComponent } from '../product-form/product-form.component';
   ]
 })
 export class ProductListComponent {
-  @Input() products!: Product[];
-  @Input() categories!: Category[];
+  products$!: Observable<PaginatedData>;
 
   columns = ['description', 'price', 'category', 'box-price', 'details'];
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private service: ProductService) {}
 
   ngOnInit(): void {
-
+    this.products$ = this.service.listProducts({});
   }
 
   showDetails(product: Product) {
-    this.dialog.open(ProductFormComponent, {data: {product, categories: this.categories}});
+    this.dialog.open(ProductFormComponent, {data: {product}});
   }
 }

@@ -10,7 +10,7 @@
           placeholder="Descrição"
           formControlName="description"
         >
-        <mat-error *ngIf="productData.get('description')?.invalid">
+        <mat-error>
           Por favor, informe a descrição do produto
         </mat-error>
       </mat-form-field>
@@ -30,7 +30,7 @@
       </div>
     </mat-step>
 
-    <mat-step [stepControl]="group(productData.get('category')!, productData.get('price')!)">
+    <mat-step [stepControl]="productData.get('category')! && productData.get('price')!">
       <ng-template matStepLabel>Categoria e Preço</ng-template>
       <div class="category-price">
         <mat-form-field class="category">
@@ -41,11 +41,11 @@
             [matAutocomplete]="auto"
             placeholder="Categoria"
           >
-          <mat-error *ngIf="productData.get('category')?.invalid">
+          <mat-error>
             Por favor, informe a categoria do produto
           </mat-error>
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-            <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+            <mat-option *ngFor="let category of categories$ | async" [value]="category">
               {{ category.name }}
             </mat-option>
           </mat-autocomplete>
@@ -61,7 +61,7 @@
             [dropSpecialCharacters]="false"
             placeholder="0.00"
           >
-          <mat-error *ngIf="productData.get('price')?.invalid">
+          <mat-error>
             Por favor, informe o preço do produto
           </mat-error>
         </mat-form-field>
@@ -81,15 +81,15 @@
 
         <mat-form-field class="quantityProduct">
           <mat-label>Quantidade</mat-label>
-          <input mask="0*" matInput type="text" formControlName="quantityProduct">
-          <mat-error *ngIf="productData.get('box')?.get('quantityProduct')?.invalid">
+          <input mask="0*" matInput type="text" formControlName="quantityProduct" [validation]="false">
+          <mat-error>
             Por favor, informe a quantidade de produtos
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="code">
           <input matInput type="text" placeholder="Código" formControlName="code">
-          <mat-error *ngIf="productData.get('box')?.get('code')?.invalid">
+          <mat-error>
             Por favor, informe o código de barras da caixa
           </mat-error>
         </mat-form-field>
@@ -104,8 +104,9 @@
             mask="0*.00"
             [dropSpecialCharacters]="false"
             placeholder="0.00"
+            [validation]="false"
           >
-          <mat-error *ngIf="productData.get('box')?.get('price')?.invalid">
+          <mat-error>
             Por favor, informe o preço da caixa
           </mat-error>
         </mat-form-field>
