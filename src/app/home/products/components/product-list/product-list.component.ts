@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,21 +28,18 @@ import { ProductFormComponent } from '../product-form/product-form.component';
   ]
 })
 export class ProductListComponent {
-  products$!: Observable<PaginatedData>;
+  @Input() products!: PaginatedData;
+  @Output() page = new EventEmitter<number>();
 
   columns = ['description', 'price', 'category', 'box-price', 'details'];
 
   constructor(public dialog: MatDialog, private service: ProductService) {}
-
-  ngOnInit(): void {
-    this.products$ = this.service.listProducts({});
-  }
 
   showDetails(product: Product) {
     this.dialog.open(ProductFormComponent, {data: {product}});
   }
 
   changePage(page: number) {
-    this.products$ = this.service.listProducts({page});
+    this.page.emit(page);
   }
 }

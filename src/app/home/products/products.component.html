@@ -2,9 +2,13 @@
 
 <mat-tab-group dynamicHeight>
   <mat-tab labelClass="tab-label" label="Lista">
-    <app-product-list></app-product-list>
+    <app-product-list
+      *ngIf="products$ | async as products"
+      [products]="products"
+      (page)="getProducts($event)"
+    ></app-product-list>
   </mat-tab>
   <mat-tab labelClass="tab-label" label="Novo">
-    <app-register-product></app-register-product>
+    <app-register-product (onRegister)="getProducts(0)"></app-register-product>
   </mat-tab>
 </mat-tab-group>

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
+  FormGroupDirective,
   FormsModule,
   ReactiveFormsModule,
   Validators,
@@ -45,11 +45,14 @@ import { ProductService } from '../../../../shared/services/product.service';
 })
 export class RegisterProductComponent {
   @ViewChild('stepper') stepper!: MatStepper;
+  @ViewChild('formDirective') formDirective!: FormGroupDirective;
   productData!: FormGroup;
 
   categories$!: Observable<Category[]>;
 
   hasBox: boolean = false;
+
+  @Output() onRegister = new EventEmitter<void>();
 
   constructor(private formBuilder: FormBuilder, private service: ProductService) {}
 
@@ -79,7 +82,7 @@ export class RegisterProductComponent {
   }
 
   filterCategory() {
-    this.categories$ = (this.productData.get('category') as FormControl).valueChanges.pipe(
+    this.categories$ = this.productData.get('category')!.valueChanges.pipe(
       startWith(''),
       debounceTime(600),
       distinctUntilChanged(),
@@ -134,7 +137,10 @@ export class RegisterProductComponent {
 
   resetForm() {
     this.productData.reset();
+    this.formDirective.resetForm();
+    this.productData.get('category')?.setValue('');
     this.productData.get('box')?.disable();
     this.stepper.reset();
+    this.onRegister.emit();
   }
 }
