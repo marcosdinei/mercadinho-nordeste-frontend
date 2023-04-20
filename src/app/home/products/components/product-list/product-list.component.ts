@@ -5,9 +5,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
-import { PaginatedData } from 'src/app/shared/model/api-response';
-import { Product } from 'src/app/shared/model/product';
 
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { PaginatedData } from '../../../../shared/model/api-response';
+import { Product } from '../../../../shared/model/product';
 import { ProductService } from '../../../../shared/services/product.service';
 import { ProductFormComponent } from '../product-form/product-form.component';
 
@@ -22,7 +23,8 @@ import { ProductFormComponent } from '../product-form/product-form.component';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    ProductFormComponent
+    ProductFormComponent,
+    PaginationComponent
   ]
 })
 export class ProductListComponent {
@@ -38,5 +40,9 @@ export class ProductListComponent {
 
   showDetails(product: Product) {
     this.dialog.open(ProductFormComponent, {data: {product}});
+  }
+
+  changePage(page: number) {
+    this.products$ = this.service.listProducts({page});
   }
 }

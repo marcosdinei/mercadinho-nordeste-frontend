@@ -1,0 +1,9 @@
+<mat-paginator
+  color="primary"
+  [hidePageSize]="true"
+  [length]="pagination.totalNumberOfElements"
+  [pageIndex]="pagination.page - 1"
+  [pageSize]="pagination.size"
+  [showFirstLastButtons]="true"
+  (page)="changePage($event)"
+></mat-paginator>

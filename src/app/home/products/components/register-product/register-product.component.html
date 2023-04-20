@@ -1,6 +1,17 @@
 <form [formGroup]="productData" (ngSubmit)="submitProduct()">
   <mat-stepper #stepper [linear]="true">
 
+    <mat-step [stepControl]="productData.get('code')!">
+      <ng-template matStepLabel>Código de barras</ng-template>
+      <mat-form-field class="code">
+        <input matInput type="text" placeholder="Código" formControlName="code">
+      </mat-form-field>
+      <div class="stepper-button">
+        <button mat-button type="button" matStepperPrevious>Voltar</button>
+        <button mat-button type="button" matStepperNext>Avançar</button>
+      </div>
+    </mat-step>
+
     <mat-step [stepControl]="productData.get('description')!">
       <ng-template matStepLabel>Descrição do produto</ng-template>
       <mat-form-field class="description">
@@ -15,17 +26,6 @@
         </mat-error>
       </mat-form-field>
       <div class="stepper-button">
-        <button mat-button type="button" matStepperNext>Avançar</button>
-      </div>
-    </mat-step>
-
-    <mat-step [stepControl]="productData.get('code')!">
-      <ng-template matStepLabel>Código de barras</ng-template>
-      <mat-form-field class="code">
-        <input matInput type="text" placeholder="Código" formControlName="code">
-      </mat-form-field>
-      <div class="stepper-button">
-        <button mat-button type="button" matStepperPrevious>Voltar</button>
         <button mat-button type="button" matStepperNext>Avançar</button>
       </div>
     </mat-step>

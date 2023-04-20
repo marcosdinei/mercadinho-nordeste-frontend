@@ -68,7 +68,7 @@ export class ProductFormComponent {
 
     this.productData.patchValue(this.data.product);
 
-    //just to show the dot of float values on the input
+    //just to show the dot of float values in the input
     this.productData.get('price')?.setValue(this.productData.get('price')?.value.toString());
 
     if (this.data.product.box) this.hasBox = true;

@@ -1,5 +1,5 @@
-<div class="shadow">
-  <table mat-table [dataSource]="products.content" *ngIf="products$ | async as products">
+<div *ngIf="products$ | async as products">
+  <table mat-table [dataSource]="products.content">
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Descrição</th>
@@ -34,4 +34,6 @@
     <tr mat-row *matRowDef="let element; columns: columns;"></tr>
 
   </table>
+
+  <app-pagination [pagination]="products.pagination" (page)="changePage($event)"></app-pagination>
 </div>
