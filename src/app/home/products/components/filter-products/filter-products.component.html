@@ -1,0 +1,45 @@
+<form class="filter" [formGroup]="params" (ngSubmit)="search()">
+  <mat-form-field class="description">
+    <mat-label>Descrição</mat-label>
+    <input matInput formControlName="description">
+  </mat-form-field>
+
+  <div class="price">
+    <mat-form-field class="field" floatLabel="always">
+      <mat-label>Preço mínimo</mat-label>
+      <span matTextPrefix>R$</span>
+      <input
+        matInput
+        type="text"
+        formControlName="minPrice"
+        mask="0*.00"
+        [dropSpecialCharacters]="false"
+        placeholder="0.00"
+      >
+    </mat-form-field>
+    <mat-form-field class="field" floatLabel="always">
+      <mat-label>Preço máximo</mat-label>
+      <span matTextPrefix>R$</span>
+      <input
+        matInput
+        type="text"
+        formControlName="maxPrice"
+        mask="0*.00"
+        [dropSpecialCharacters]="false"
+        placeholder="0.00"
+      >
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="category">
+    <mat-label>Categoria</mat-label>
+    <mat-select formControlName="category">
+      <mat-option>Nennuma</mat-option>
+      <mat-option *ngFor="let category of categories$ | async" [value]="category.id">{{ category.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button type="submit" mat-fab color="primary" aria-label="Pesquisar">
+    <mat-icon>search</mat-icon>
+  </button>
+</form>

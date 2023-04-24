@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { ApiResponse, PaginatedData } from '../model/api-response';
-import { Category, Product } from '../model/product';
+import { Category, Product, ProductBox } from '../model/product';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,22 @@ export class ProductService {
   endpoints = {
     product: () => '/product',
     getProductByCode: (code: string) => `/product/${code}`,
+    getBoxByCode: (code: string) => `/box/${code}`,
     category: () => '/category'
   }
 
   constructor(private http: HttpClient) { }
 
-  listProducts(params: any): Observable<PaginatedData> {
+  listProducts(
+    params: {
+      page?: number,
+      size?: number,
+      description?: string,
+      minValue?: number,
+      maxValue?: number,
+      category?: number
+    }
+  ): Observable<PaginatedData> {
     return this.http.get<ApiResponse>(`${environment.server}${this.endpoints.product()}`, { params }).pipe(
       map((res: ApiResponse) => res.data)
     );
@@ -32,6 +42,18 @@ export class ProductService {
 
   updateProduct(product: Product): Observable<Product> {
     return this.http.put<ApiResponse>(`${environment.server}${this.endpoints.product()}`, product).pipe(
+      map((res: ApiResponse) => res.data)
+    );
+  }
+
+  getProductByCode(code: string): Observable<Product> {
+    return this.http.get<ApiResponse>(`${environment.server}${this.endpoints.getProductByCode(code)}`).pipe(
+      map((res: ApiResponse) => res.data)
+    );
+  }
+
+  getBoxByCode(code: string): Observable<ProductBox> {
+    return this.http.get<ApiResponse>(`${environment.server}${this.endpoints.getBoxByCode(code)}`).pipe(
       map((res: ApiResponse) => res.data)
     );
   }

@@ -2,13 +2,14 @@
 
 <mat-tab-group dynamicHeight>
   <mat-tab labelClass="tab-label" label="Lista">
+    <app-filter-products (searchParams)="getProducts($event)"></app-filter-products>
     <app-product-list
       *ngIf="products$ | async as products"
       [products]="products"
-      (page)="getProducts($event)"
+      (page)="changePage($event)"
     ></app-product-list>
   </mat-tab>
   <mat-tab labelClass="tab-label" label="Novo">
-    <app-register-product (onRegister)="getProducts(0)"></app-register-product>
+    <app-register-product (onRegister)="getProducts({page: 0})"></app-register-product>
   </mat-tab>
 </mat-tab-group>

@@ -11,14 +11,37 @@ import { ProductService } from '../../shared/services/product.service';
 })
 export class ProductsComponent {
   products$!: Observable<PaginatedData>;
+  params!: {
+    page?: number,
+    size?: number,
+    description?: string,
+    minValue?: number,
+    maxValue?: number,
+    category?: number
+  }
 
   constructor(private service: ProductService) {}
 
   ngOnInit(): void {
-    this.getProducts(0);
+    this.getProducts({page: 0});
   }
 
-  getProducts(page: number) {
-    this.products$ = this.service.listProducts({page});
+  getProducts(
+    params: {
+      page?: number,
+      size?: number,
+      description?: string,
+      minValue?: number,
+      maxValue?: number,
+      category?: number
+    }
+  ) {
+    this.params = params;
+    this.products$ = this.service.listProducts(this.params);
+  }
+
+  changePage(page: number) {
+    this.params.page = page;
+    this.getProducts(this.params);
   }
 }

@@ -1,0 +1,19 @@
+.filter {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  margin-top: 1rem;
+
+  .description, .price, .category {
+    width: 100%;
+  }
+
+  .price {
+    display: flex;
+    gap: 1rem;
+
+    .field input {
+      text-align: right;
+    }
+  }
+}
