@@ -60,6 +60,7 @@ export class ProductFormComponent {
       price: [null, Validators.required],
       code: [null, Validators.required],
       box: this.formBuilder.group({
+        id: [null],
         quantityProduct: [null],
         price: [null],
         code: [null]
@@ -92,19 +93,23 @@ export class ProductFormComponent {
     this.hasBox = hasBox.checked
     if (this.hasBox) {
       this.productData.get('box')?.enable();
+
+      this.productData.get('box')?.patchValue(this.data.product.box);
+
       this.productData.get('box.quantityProduct')?.setValidators([Validators.required]);
       this.productData.get('box.price')?.setValidators([Validators.required]);
       this.productData.get('box.code')?.setValidators([Validators.required]);
     }
     else {
       this.productData.get('box')?.disable();
-      this.productData.get('box')?.setValue(
-        {
-          quantityProduct: null,
-          price: null,
-          code: null
-        }
-      );
+
+      this.productData.get('box')?.patchValue({
+        quantityProduct: null,
+        price: null,
+        code: null
+      });
+      this.productData.get('box')?.setValue(null);
+
       this.productData.get('box.quantityProduct')?.clearValidators();
       this.productData.get('box.price')?.clearValidators();
       this.productData.get('box.code')?.clearValidators();
@@ -123,7 +128,7 @@ export class ProductFormComponent {
             switchMap((res: Category) => {
               this.productData.get('category')?.setValue(res);
               this.productData.updateValueAndValidity();
-              return this.service.updateProduct(this.productData.value)
+              return this.service.updateProduct(this.productData.value);
             })
           )
           .subscribe();

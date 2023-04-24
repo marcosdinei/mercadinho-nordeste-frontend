@@ -4,12 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Observable } from 'rxjs';
 
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { PaginatedData } from '../../../../shared/model/api-response';
 import { Product } from '../../../../shared/model/product';
-import { ProductService } from '../../../../shared/services/product.service';
 import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
@@ -33,10 +31,11 @@ export class ProductListComponent {
 
   columns = ['description', 'price', 'category', 'box-price', 'details'];
 
-  constructor(public dialog: MatDialog, private service: ProductService) {}
+  constructor(public dialog: MatDialog) {}
 
   showDetails(product: Product) {
-    this.dialog.open(ProductFormComponent, {data: {product}});
+    let modal = this.dialog.open(ProductFormComponent, {data: {product}});
+    modal.afterClosed().subscribe((reloadPage: boolean) => reloadPage ? this.changePage(0) : {});
   }
 
   changePage(page: number) {

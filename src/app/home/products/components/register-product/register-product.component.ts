@@ -94,12 +94,14 @@ export class RegisterProductComponent {
     this.hasBox = hasBox.checked;
     if (this.hasBox) {
       this.productData.get('box')?.enable();
+
       this.productData.get('box.quantityProduct')?.setValidators([Validators.required]);
       this.productData.get('box.price')?.setValidators([Validators.required]);
       this.productData.get('box.code')?.setValidators([Validators.required]);
     }
     else {
       this.productData.get('box')?.disable();
+
       this.productData.get('box')?.setValue(
         {
           quantityProduct: null,
@@ -107,6 +109,7 @@ export class RegisterProductComponent {
           code: null
         }
       );
+
       this.productData.get('box.quantityProduct')?.clearValidators();
       this.productData.get('box.price')?.clearValidators();
       this.productData.get('box.code')?.clearValidators();
@@ -125,7 +128,7 @@ export class RegisterProductComponent {
             switchMap((res: Category) => {
               this.productData.get('category')?.setValue(res);
               this.productData.updateValueAndValidity();
-              return this.service.createProduct(this.productData.value)
+              return this.service.createProduct(this.productData.value);
             })
           )
           .subscribe(() => this.resetForm());
